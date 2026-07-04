@@ -5,7 +5,7 @@ A storytelling game about careers and work situations in an agile context – as
 Based on “360 Stories” by Wilma Mulder ([www.360stories.one](https://www.360stories.one)),
 adapted by Udo Wiegärtner for job situations in an agile context.
 
-**Play it live:** https://kosmonautica.github.io/360StoriesUdosVersion/
+**Play it live:** https://kosmonautica.github.io/360UserStories/
 
 ## Play locally
 

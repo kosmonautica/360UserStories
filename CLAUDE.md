@@ -73,9 +73,9 @@ Useful patterns from previous sessions:
 
 ## Deployment (GitHub Pages)
 
-- GitHub Pages serves this repo at https://kosmonautica.github.io/360StoriesUdosVersion/ via the
-  **built-in “pages build and deployment” workflow** (no workflow file in the repo). Every push to
-  the configured branch deploys automatically.
+- GitHub Pages serves this repo at https://kosmonautica.github.io/360UserStories/ via the
+  **built-in “pages build and deployment” workflow** (no workflow file in the repo). Pages deploys
+  from **`main`** – every merge to `main` goes live automatically.
 - **Known flakiness:** deployments sometimes fail within ~5 s with GitHub's transient error
   `Deployment failed, try again later.` This is never caused by repo content. **Do not re-run**
   the failed run – re-runs of this dynamic workflow get stuck in a un-cancellable “queued” limbo.
@@ -86,7 +86,10 @@ Useful patterns from previous sessions:
 
 ## Conventions
 
-- Branch used for development so far: `claude/browser-game-static-html-g51v22` (PR #1).
+- The repo was renamed from `360StoriesUdosVersion` to `360UserStories` – old URLs and local
+  clone directories may still use the old name; GitHub redirects them.
+- Development happens on `claude/…` feature branches PR'd into `main` (PRs #1, #2 so far).
+  The owner merges quickly – restart the feature branch from `origin/main` after each merge.
 - Keep code comments in English.
 - The owner communicates in German (often via speech-to-text – expect transcription quirks);
   the product itself stays English.
