@@ -1,24 +1,24 @@
 # 360 User Stories – The Story Wheel
 
-Ein Erzählspiel über Berufs- und Arbeitssituationen im agilen Kontext – als rein statische Browser-Anwendung.
+A storytelling game about careers and work situations in an agile context – as a purely static browser application.
 
-Basierend auf „360 Stories“ von Wilma Mulder ([www.360stories.one](https://www.360stories.one)),
-für Job-Situationen im agilen Kontext adaptiert von Udo Wiegärtner.
+Based on “360 Stories” by Wilma Mulder ([www.360stories.one](https://www.360stories.one)),
+adapted by Udo Wiegärtner for job situations in an agile context.
 
-## Spielen
+## Play
 
-Einfach **`index.html` im Browser öffnen** – kein Server, kein Build, keine Abhängigkeiten.
-Alles (HTML, CSS, JavaScript, SVG-Grafiken) steckt in einer einzigen Datei und funktioniert auch offline per Doppelklick.
+Simply **open `index.html` in your browser** – no server, no build, no dependencies.
+Everything (HTML, CSS, JavaScript, SVG graphics) lives in a single file and works offline with a double-click.
 
-Alternativ kann die Seite über GitHub Pages o. ä. gehostet werden.
+Alternatively, the page can be hosted via GitHub Pages or similar.
 
-## So wird gespielt
+## How to play
 
-1. **Direction** – Das große Rad mit geschlossenen Augen drehen, jemand anderes ruft „Stopp!“.
-   Der Pfeil zeigt auf bis zu vier mögliche Themen (eines pro Ring).
-2. **Color** – Das Farbrad bestimmt, zu welchem der vier Themen erzählt wird.
-   Schwarz = Blackbox (die Mitspieler:innen wählen), Weiß = Wildcard (du wählst selbst).
-3. **Category** – Bestimmt die Art der Geschichte: First, Last, Best, Worst, Advise oder „?“.
+1. **Direction** – Spin the big wheel with your eyes closed; someone else calls “Stop!”.
+   The arrow points to up to four possible topics (one per ring).
+2. **Color** – The color wheel decides which of the four topics you'll tell a story about.
+   Black = Blackbox (your co-players pick), White = Wildcard (you pick yourself).
+3. **Category** – Decides what kind of story is wanted: First, Last, Best, Worst, Advise, or “?”.
 
-Geschichten dauern meist 2–3 Minuten. Kein Kommentieren, keine Nachfragen –
-nach jeder Geschichte einfach „Danke fürs Teilen“ sagen. Es gibt kein Gewinnen und kein Ende.
+Stories usually take 2–3 minutes. No commenting, no follow-up questions –
+after each story simply say “Thanks for sharing”. There is no winning and no ending.

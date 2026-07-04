@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -234,22 +234,22 @@
 
 <header>
   <h1>360 User Stories – The Story Wheel</h1>
-  <p>Ein Erzählspiel über Berufs- und Arbeitssituationen im agilen Kontext · kein Gewinnen, kein Ende – nur Geschichten</p>
+  <p>A storytelling game about careers and work situations in an agile context · no winning, no ending – just stories</p>
 </header>
 
 <div class="layout">
 
   <!-- STEP 1: big wheel -->
   <div class="card" id="card1">
-    <h2><span class="stepnum">1</span> Direction – Das große Rad</h2>
+    <h2><span class="stepnum">1</span> Direction – The Big Wheel</h2>
     <div class="wheelwrap" id="wheel1wrap">
-      <svg id="wheel1" viewBox="0 0 1000 1000" role="img" aria-label="Großes Themenrad mit vier Ringen"></svg>
+      <svg id="wheel1" viewBox="0 0 1000 1000" role="img" aria-label="Big topic wheel with four rings"></svg>
     </div>
     <div class="controls">
-      <button class="primary" id="spin1">Drehen</button>
-      <button class="stop" id="stop1" disabled>Stopp!</button>
+      <button class="primary" id="spin1">Spin</button>
+      <button class="stop" id="stop1" disabled>Stop!</button>
     </div>
-    <p class="hint">Das Rad hält nach kurzer Zeit von selbst an – mit <b>„Stopp!“</b> kann es auch früher gestoppt werden.</p>
+    <p class="hint">The wheel stops on its own after a short while – hit <b>“Stop!”</b> to stop it earlier.</p>
   </div>
 
   <div class="rightcol">
@@ -259,11 +259,11 @@
       <div class="card inactive" id="card2">
         <h2><span class="stepnum">2</span> Color</h2>
         <div class="wheelwrap" id="wheel2wrap">
-          <svg id="wheel2" viewBox="0 0 300 300" role="img" aria-label="Farbrad"></svg>
+          <svg id="wheel2" viewBox="0 0 300 300" role="img" aria-label="Color wheel"></svg>
         </div>
         <div class="controls">
-          <button class="primary" id="spin2" disabled>Drehen</button>
-          <button class="stop" id="stop2" disabled>Stopp!</button>
+          <button class="primary" id="spin2" disabled>Spin</button>
+          <button class="stop" id="stop2" disabled>Stop!</button>
         </div>
       </div>
 
@@ -271,26 +271,26 @@
       <div class="card inactive" id="card3">
         <h2><span class="stepnum">3</span> Category</h2>
         <div class="wheelwrap" id="wheel3wrap">
-          <svg id="wheel3" viewBox="0 0 300 300" role="img" aria-label="Kategorierad"></svg>
+          <svg id="wheel3" viewBox="0 0 300 300" role="img" aria-label="Category wheel"></svg>
         </div>
         <div class="controls">
-          <button class="primary" id="spin3" disabled>Drehen</button>
-          <button class="stop" id="stop3" disabled>Stopp!</button>
+          <button class="primary" id="spin3" disabled>Spin</button>
+          <button class="stop" id="stop3" disabled>Stop!</button>
         </div>
       </div>
     </div>
 
     <!-- RESULT -->
     <div class="card" id="resultCard">
-      <h2><span class="stepnum" style="background:var(--ink)">★</span> Deine Story</h2>
+      <h2><span class="stepnum" style="background:var(--ink)">★</span> Your Story</h2>
       <div id="topicArea">
-        <p class="placeholder" id="topicPlaceholder">Dreh zuerst das große Rad – der Pfeil zeigt auf bis zu vier mögliche Themen.</p>
+        <p class="placeholder" id="topicPlaceholder">Spin the big wheel first – the arrow points to up to four possible topics.</p>
         <div class="topics" id="topics" hidden></div>
         <p class="hint" id="colorHint" hidden></p>
       </div>
       <div class="story" id="story" hidden></div>
       <div class="controls">
-        <button id="resetBtn">Neue Runde</button>
+        <button id="resetBtn">New Round</button>
       </div>
     </div>
 
@@ -298,63 +298,63 @@
 </div>
 
 <details>
-  <summary>Spielregeln – How to Play</summary>
+  <summary>How to Play</summary>
   <div class="card">
-    <p><i>Basierend auf „360 Stories“ von Wilma Mulder (<a href="https://www.360stories.one" target="_blank" rel="noopener">www.360stories.one</a>), für Job-Situationen im agilen Kontext adaptiert von Udo Wiegärtner.</i></p>
+    <p><i>Based on “360 Stories” by Wilma Mulder (<a href="https://www.360stories.one" target="_blank" rel="noopener">www.360stories.one</a>), adapted by Udo Wiegärtner for job situations in an agile context.</i></p>
 
-    <h3>Zweck</h3>
+    <h3>Purpose</h3>
     <ul>
-      <li>Hilft, Geschichten über die eigene Berufslaufbahn und Arbeitssituationen zu teilen.</li>
-      <li>Persönlich, bedeutsam und wertschätzend – kein Übertrumpfen.</li>
+      <li>Helps people share stories about their careers and work situations.</li>
+      <li>Personal, meaningful, and appreciative – no one-upping each other.</li>
     </ul>
 
-    <h3>So wird gespielt – drei Schritte nacheinander</h3>
+    <h3>How to play – three steps, one after another</h3>
     <ul>
-      <li><b>Schritt 1 – Direction (Rad 1):</b> Der/die nächste Erzähler:in startet das große Rad mit geschlossenen Augen. Jemand anderes ruft „Stopp!“. Der Pfeil zeigt auf bis zu vier mögliche Themen (eines pro Ring).</li>
-      <li><b>Schritt 2 – Color (Rad 2):</b> Das Farbrad bestimmt, zu welchem der vier Themen erzählt wird – die Farbe entspricht dem Ring.
+      <li><b>Step 1 – Direction (Wheel 1):</b> The next storyteller spins the big wheel with their eyes closed. Someone else calls “Stop!”. The arrow points to up to four possible topics (one per ring).</li>
+      <li><b>Step 2 – Color (Wheel 2):</b> The color wheel decides which of the four topics you'll tell a story about – the color indicates the ring.
         <ul>
-          <li><b>Schwarz = Blackbox:</b> Die Mitspieler:innen wählen eines der vier Themen für dich aus.</li>
-          <li><b>Weiß = Wildcard:</b> Du wählst selbst eines der vier Themen aus.</li>
+          <li><b>Black = Blackbox:</b> Your co-players pick one of the four topics for you.</li>
+          <li><b>White = Wildcard:</b> You pick one of the four topics yourself.</li>
         </ul>
       </li>
-      <li><b>Schritt 3 – Category (Rad 3):</b> Bestimmt, welche Art von Geschichte gewünscht ist:
+      <li><b>Step 3 – Category (Wheel 3):</b> Decides what kind of story is wanted:
         <ul>
-          <li><b>First</b> – Was verbindest du mit dem allerersten Mal in diesem Kontext?</li>
-          <li><b>Last</b> – Was verbindest du mit dem letzten / jüngsten Mal?</li>
-          <li><b>Best</b> – Was war ein großartiger Moment in diesem Kontext?</li>
-          <li><b>Worst</b> – Was war ein schwieriger Moment in diesem Kontext?</li>
-          <li><b>Advise</b> – Welchen Rat würdest du zu diesem Thema geben?</li>
-          <li><b>?</b> – Freie Wahl: Erzähl, was dir dazu einfällt.</li>
+          <li><b>First</b> – What do you connect with the very first time in this context?</li>
+          <li><b>Last</b> – What do you connect with the most recent time?</li>
+          <li><b>Best</b> – What was a great moment in this context?</li>
+          <li><b>Worst</b> – What was a tough moment in this context?</li>
+          <li><b>Advise</b> – What advice would you give on this topic?</li>
+          <li><b>?</b> – Your choice: tell whatever comes to mind.</li>
         </ul>
       </li>
-      <li>Geschichten dauern meist 2–3 Minuten.</li>
+      <li>Stories usually take 2–3 minutes.</li>
     </ul>
 
-    <h3>Ein paar Tipps fürs Erzählen</h3>
+    <h3>A few tips for storytelling</h3>
     <ul>
-      <li>Geschichten nicht kommentieren – einfach zuhören.</li>
-      <li>Keine Nachfragen.</li>
-      <li>Kein „Oh, mir ist mal etwas Ähnliches passiert…“ – gib der Geschichte den Raum, den sie verdient.</li>
+      <li>Don't comment on stories – just listen.</li>
+      <li>No follow-up questions.</li>
+      <li>No “Oh, something similar happened to me…” – give the story the space it deserves.</li>
     </ul>
 
-    <h3>Kein Gewinnen, kein Ende</h3>
+    <h3>No winning, no ending</h3>
     <ul>
-      <li>Es gibt kein Ziel und keine Ziellinie.</li>
-      <li>Spielt so lange, wie Menschen teilen möchten.</li>
-      <li>Nach jeder Geschichte: einfach „Danke fürs Teilen“ sagen – dann ist die nächste Person dran.</li>
+      <li>There's no goal, no finish line.</li>
+      <li>Play as long as people want to share.</li>
+      <li>After each story: simply say “Thanks for sharing” – and the next person goes.</li>
     </ul>
   </div>
 </details>
 
 <footer>
-  <b>360 User Stories</b> – zusammengestellt von Udo Wiegärtner.<br>
-  Inspiration und Copyright der Grundidee: „360 Stories“ von Wilma Mulder (<a href="https://www.360stories.one" target="_blank" rel="noopener">www.360stories.one</a>)
+  <b>360 User Stories</b> – assembled by Udo Wiegärtner.<br>
+  Inspiration and copyright for the basic idea: “360 Stories” by Wilma Mulder (<a href="https://www.360stories.one" target="_blank" rel="noopener">www.360stories.one</a>)
 </footer>
 
 <script>
 "use strict";
 
-/* ============================== Daten ============================== */
+/* ============================== Data ============================== */
 
 const COLORS = {
   red:   "#a03c3c",
@@ -366,7 +366,7 @@ const COLORS = {
   ink:   "#1f1c17"
 };
 
-/* Ring-Inhalte, im Uhrzeigersinn ab 12 Uhr */
+/* Ring contents, clockwise from 12 o'clock */
 const RING_BLUE = ["Respect","Bug","Autonomy","Courage","Challenge","Happiness","Home Office","Beginnings",
                    "Play","Commitment","Carreer","Balance","Dogma","Failure","Requirement","Effort",
                    "Estimation","Fear","Doubt","Communication","Debt","Mastery","Passion","Learning",
@@ -376,9 +376,9 @@ const RING_GREEN = ["Conflict","Growing","Profit","Vision","Strategy","Salary","
 const RING_GOLD  = ["Leader","Manager","Team","Scrum Master","Mentor","User","Product Owner","Tester"];
 const RING_RED   = ["People","Process","Product","Purpose"];
 
-const RING_NAMES = {blue:"Außenring", green:"Grüner Ring", gold:"Goldener Ring", red:"Innenring"};
+const RING_NAMES = {blue:"Outer Ring", green:"Green Ring", gold:"Gold Ring", red:"Inner Ring"};
 
-/* Farbrad, im Uhrzeigersinn; Sektor 0 mittig oben */
+/* Color wheel, clockwise; sector 0 centered at top */
 const COLOR_SEGS = [
   {key:"blue",  fill:COLORS.blue},
   {key:"gold",  fill:COLORS.gold},
@@ -388,17 +388,17 @@ const COLOR_SEGS = [
   {key:"black", fill:"#1a1a1a"}
 ];
 
-/* Kategorierad, im Uhrzeigersinn; Sektor 0 mittig oben */
+/* Category wheel, clockwise; sector 0 centered at top */
 const CATEGORIES = [
-  {label:"First",  expl:"Was verbindest du mit dem allerersten Mal in diesem Kontext?"},
-  {label:"Last",   expl:"Was verbindest du mit dem letzten / jüngsten Mal in diesem Kontext?"},
-  {label:"Best",   expl:"Was war ein großartiger Moment in diesem Kontext?"},
-  {label:"Worst",  expl:"Was war ein schwieriger Moment in diesem Kontext?"},
-  {label:"Advise", expl:"Welchen Rat würdest du zu diesem Thema geben?"},
-  {label:"?",      expl:"Freie Wahl – erzähl, was dir zu diesem Thema einfällt."}
+  {label:"First",  expl:"What do you connect with the very first time in this context?"},
+  {label:"Last",   expl:"What do you connect with the most recent time in this context?"},
+  {label:"Best",   expl:"What was a great moment in this context?"},
+  {label:"Worst",  expl:"What was a tough moment in this context?"},
+  {label:"Advise", expl:"What advice would you give on this topic?"},
+  {label:"?",      expl:"Your choice – tell whatever comes to mind about this topic."}
 ];
 
-/* ============================== SVG-Helfer ============================== */
+/* ============================== SVG helpers ============================== */
 
 const SVGNS = "http://www.w3.org/2000/svg";
 
@@ -409,13 +409,13 @@ function el(name, attrs, parent){
   return n;
 }
 
-/* Winkel in Grad, im Uhrzeigersinn ab 12 Uhr */
+/* Angle in degrees, clockwise from 12 o'clock */
 function pt(cx, cy, r, aDeg){
   const a = aDeg * Math.PI / 180;
   return [cx + r * Math.sin(a), cy - r * Math.cos(a)];
 }
 
-/* Ringsegment (Kreisring-Ausschnitt) von a0 bis a1 */
+/* Annular ring segment from a0 to a1 */
 function wedgePath(cx, cy, r0, r1, a0, a1){
   const large = (a1 - a0) > 180 ? 1 : 0;
   const [x0o,y0o] = pt(cx,cy,r1,a0), [x1o,y1o] = pt(cx,cy,r1,a1);
@@ -424,7 +424,7 @@ function wedgePath(cx, cy, r0, r1, a0, a1){
          `L ${x1i} ${y1i} A ${r0} ${r0} 0 ${large} 0 ${x0i} ${y0i} Z`;
 }
 
-/* Bogenpfad für Beschriftungen; in der unteren Hälfte umgedreht, damit Text lesbar bleibt */
+/* Arc path for labels; reversed in the bottom half so text stays readable */
 function labelArc(cx, cy, r, a0, a1){
   const mid = (a0 + a1) / 2 % 360;
   const flipped = mid > 90 && mid < 270;
@@ -453,7 +453,7 @@ function ringLabel(svg, defs, cx, cy, r, a0, a1, text, maxFont){
   tp.textContent = text;
 }
 
-/* ============================== Rad 1: großes Rad ============================== */
+/* ============================== Wheel 1: big wheel ============================== */
 
 function buildBigWheel(){
   const svg = document.getElementById("wheel1");
@@ -481,21 +481,21 @@ function buildBigWheel(){
     }
   }
 
-  /* Trennlinien des Außenrings ragen leicht nach außen (wie im Original) */
+  /* Outer-ring dividers stick out slightly (as in the original) */
   for (let i=0; i<32; i++){
     const a = i * 11.25;
     const [x0,y0] = pt(cx,cy,420,a), [x1,y1] = pt(cx,cy,494,a);
     el("line", {x1:x0, y1:y0, x2:x1, y2:y1, stroke:"#3a352c", "stroke-width":1, opacity:.35}, svg);
   }
 
-  /* Nabe */
+  /* Hub */
   el("circle", {cx, cy, r:145, fill:COLORS.board}, svg);
 
-  /* Hervorhebung des Ergebnis-Sektors */
+  /* Highlight for the resulting sector */
   const hl = el("path", {id:"sectorHighlight", fill:"rgba(31,28,23,.07)", stroke:COLORS.ink,
                          "stroke-width":5, "stroke-linejoin":"round", visibility:"hidden"}, svg);
 
-  /* Pfeil: schwarzer Zeiger mit hellem Gegengewicht */
+  /* Arrow: black pointer with light counterweight */
   const arrow = el("g", {id:"arrow1"}, svg);
   el("rect", {x:cx-5, y:cy-30, width:10, height:330, rx:5, fill:"#d7d2c6",
               stroke:"#9a948a", "stroke-width":1}, arrow);
@@ -507,7 +507,7 @@ function buildBigWheel(){
   return {svg, arrow, highlight: hl, cx, cy};
 }
 
-/* ============================== Rad 2: Farbrad ============================== */
+/* ============================== Wheel 2: color wheel ============================== */
 
 function buildColorWheel(){
   const svg = document.getElementById("wheel2");
@@ -536,7 +536,7 @@ function buildColorWheel(){
   return {svg, arrow, cx, cy};
 }
 
-/* ============================== Rad 3: Kategorierad ============================== */
+/* ============================== Wheel 3: category wheel ============================== */
 
 function buildCategoryWheel(){
   const svg = document.getElementById("wheel3");
@@ -564,7 +564,7 @@ function buildCategoryWheel(){
   return {svg, arrow, cx, cy};
 }
 
-/* ============================== Spinner-Mechanik ============================== */
+/* ============================== Spinner mechanics ============================== */
 
 const spinners = [];
 
@@ -581,9 +581,9 @@ class Spinner {
     spinners.push(this);
   }
   start(){
-    this.vel = 11 + Math.random() * 7;   /* Grad pro Frame */
+    this.vel = 11 + Math.random() * 7;   /* degrees per frame */
     this.state = "spinning";
-    /* Rad hält nach kurzer Zeit von selbst an */
+    /* wheel stops on its own after a short while */
     clearTimeout(this.autoStopTimer);
     this.autoStopTimer = setTimeout(() => this.stop(), 800 + Math.random() * 1400);
   }
@@ -617,7 +617,7 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-/* ============================== Spielzustand & UI ============================== */
+/* ============================== Game state & UI ============================== */
 
 const state = { sector:null, color:null, topic:null, category:null };
 
@@ -638,24 +638,24 @@ function stepCard(n, active, done){
   c.classList.toggle("done", !!done);
 }
 
-/* Zum nächsten Schritt scrollen und den Kasten kurz pulsieren lassen */
+/* Scroll to the next step and briefly pulse its card */
 function pointTo(id){
   const c = $(id);
   c.scrollIntoView({behavior:"smooth", block:"nearest"});
   c.classList.remove("attention");
-  void c.offsetWidth;               /* Animation neu starten */
+  void c.offsetWidth;               /* restart the animation */
   c.classList.add("attention");
   c.addEventListener("animationend", () => c.classList.remove("attention"), {once:true});
 }
 
-/* --- Ergebnis von Rad 1: Sektor mit bis zu 4 Themen --- */
+/* --- Result of wheel 1: sector with up to 4 topics --- */
 function directionDone(angle){
   setButtons(1, false);
   const i32 = Math.floor((angle % 360) / 11.25) % 32;
   state.sector = i32;
   state.color = null; state.topic = null; state.category = null;
 
-  /* Sektor hervorheben */
+  /* highlight the sector */
   const a0 = i32 * 11.25, a1 = a0 + 11.25;
   big.highlight.setAttribute("d", wedgePath(big.cx, big.cy, 148, 490, a0, a1));
   big.highlight.setAttribute("visibility", "visible");
@@ -717,23 +717,23 @@ function renderTopics(){
 
   if (state.color === "black"){
     hint.hidden = false;
-    hint.innerHTML = "<b>Schwarz = Blackbox:</b> Deine Mitspieler:innen wählen eines der vier Themen für dich – klickt es an.";
+    hint.innerHTML = "<b>Black = Blackbox:</b> Your co-players pick one of the four topics for you – click it.";
   } else if (state.color === "white"){
     hint.hidden = false;
-    hint.innerHTML = "<b>Weiß = Wildcard:</b> Du wählst selbst eines der vier Themen – klick es an.";
+    hint.innerHTML = "<b>White = Wildcard:</b> You pick one of the four topics yourself – click it.";
   } else {
     hint.hidden = true;
   }
 }
 
-/* --- Ergebnis von Rad 2: Farbe --- */
+/* --- Result of wheel 2: color --- */
 function colorDone(angle){
   setButtons(2, false);
   const i6 = Math.floor((((angle % 360) + 30) % 360) / 60) % 6;
   const seg = COLOR_SEGS[i6];
   state.color = seg.key;
   if (seg.key === "black" || seg.key === "white"){
-    state.topic = null;                     /* wird per Klick gewählt */
+    state.topic = null;                     /* picked by clicking a chip */
   } else {
     const t = sectorTopics().find(t => t.ring === seg.key);
     state.topic = t ? t.label : null;
@@ -746,7 +746,7 @@ function colorDone(angle){
   pointTo(state.topic ? "card3" : "resultCard");
 }
 
-/* --- Ergebnis von Rad 3: Kategorie --- */
+/* --- Result of wheel 3: category --- */
 function categoryDone(angle){
   setButtons(3, false);
   const i6 = Math.floor((((angle % 360) + 30) % 360) / 60) % 6;
@@ -767,17 +767,17 @@ function renderStory(){
   box.hidden = false;
   const cat = state.category;
   if (state.topic){
-    box.innerHTML = `<div class="storybox">Erzähle deine <b>„${cat.label}“</b>-Geschichte<br>zum Thema <b>„${state.topic}“</b>!` +
+    box.innerHTML = `<div class="storybox">Tell your <b>“${cat.label}”</b> story<br>about <b>“${state.topic}”</b>!` +
                     `<span class="catexpl">${cat.expl}</span></div>`;
     card.classList.add("ready");
   } else {
-    box.innerHTML = `Kategorie: <b>„${cat.label}“</b> – <span class="catexpl" style="display:inline">${cat.expl}</span>` +
-                    `<span class="catexpl">Wähle noch das Thema aus (Schritt 2).</span>`;
+    box.innerHTML = `Category: <b>“${cat.label}”</b> – <span class="catexpl" style="display:inline">${cat.expl}</span>` +
+                    `<span class="catexpl">Now pick your topic above (step 2).</span>`;
     card.classList.remove("ready");
   }
 }
 
-/* ============================== Verkabelung ============================== */
+/* ============================== Wiring ============================== */
 
 const sp1 = new Spinner(big.arrow, big.cx, big.cy, directionDone);
 const sp2 = new Spinner(colWheel.arrow, colWheel.cx, colWheel.cy, colorDone);
@@ -817,6 +817,7 @@ $("resetBtn").addEventListener("click", () => {
   $("spin1").disabled = false; $("stop1").disabled = true;
   $("spin2").disabled = true;  $("stop2").disabled = true;
   $("spin3").disabled = true;  $("stop3").disabled = true;
+  window.scrollTo({top:0, behavior:"smooth"});
 });
 
 loop();
