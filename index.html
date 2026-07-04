@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>360 User Stories – The Story Wheel</title>
+<style>
+  :root{
+    --bg:#e9dfc6;
+    --board:#f8f4ec;
+    --ink:#1f1c17;
+    --red:#a03c3c;
+    --gold:#c39434;
+    --green:#55815f;
+    --blue:#2f6e91;
+    --muted:#7a7263;
+    --card:#fffdf8;
+    --line:#d8cdb2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+  }
+  header{
+    text-align:center;
+    padding:22px 16px 6px;
+  }
+  header h1{
+    margin:0;
+    font-size:clamp(22px,4vw,36px);
+    letter-spacing:.5px;
+  }
+  header p{
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:14px;
+  }
+  header a{color:var(--blue);}
+  .layout{
+    display:grid;
+    grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);
+    gap:18px;
+    max-width:1400px;
+    margin:14px auto 40px;
+    padding:0 16px;
+    align-items:start;
+  }
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr;}
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:0 2px 6px rgba(60,50,30,.08);
+  }
+  .card h2{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 8px;
+    font-size:18px;
+  }
+  .stepnum{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:28px;height:28px;
+    border-radius:50%;
+    background:var(--red);
+    color:#fff;
+    font-size:15px;
+    flex:none;
+  }
+  .card.inactive{opacity:.55;}
+  .card.done .stepnum{background:var(--green);}
+  svg{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none;}
+  .wheelwrap{cursor:pointer;}
+  .controls{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+  button{
+    font:inherit;
+    font-weight:600;
+    padding:9px 20px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+    transition:transform .08s ease, background .15s ease;
+  }
+  button:hover:not(:disabled){background:#f3ecdc;}
+  button:active:not(:disabled){transform:scale(.97);}
+  button:disabled{opacity:.45;cursor:not-allowed;}
+  button.primary{background:var(--red);border-color:var(--red);color:#fff;}
+  button.primary:hover:not(:disabled){background:#8c3434;}
+  button.stop{background:var(--ink);border-color:var(--ink);color:#fff;}
+  button.stop:hover:not(:disabled){background:#000;}
+  .hint{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin-top:8px;
+  }
+  .rightcol{display:flex;flex-direction:column;gap:18px;}
+  .smallwheels{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  @media (max-width:480px){
+    .smallwheels{grid-template-columns:1fr;}
+  }
+  .topics{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:10px;
+  }
+  .chip{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 12px;
+    border-radius:10px;
+    border:2px solid transparent;
+    background:#f4eede;
+    font-weight:600;
+    font-size:15px;
+  }
+  .chip .dot{
+    width:16px;height:16px;
+    border-radius:50%;
+    flex:none;
+    border:1px solid rgba(0,0,0,.25);
+  }
+  .chip .ringname{
+    margin-left:auto;
+    font-size:11px;
+    font-weight:500;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+  }
+  .chip.selectable{cursor:pointer;border-color:var(--line);}
+  .chip.selectable:hover{background:#ece2c8;}
+  .chip.chosen{
+    border-color:var(--ink);
+    background:#fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.12);
+  }
+  .chip.dimmed{opacity:.4;}
+  #resultCard{border-width:2px;}
+  #resultCard.ready{border-color:var(--red);}
+  .story{
+    font-size:17px;
+    line-height:1.5;
+  }
+  .story b{color:var(--red);}
+  .story .catexpl{
+    display:block;
+    margin-top:6px;
+    color:var(--muted);
+    font-size:14px;
+  }
+  .placeholder{color:var(--muted);font-size:14px;}
+  details{
+    max-width:1400px;
+    margin:0 auto 30px;
+    padding:0 16px;
+  }
+  details .card{padding:18px 22px;}
+  details summary{
+    cursor:pointer;
+    font-weight:700;
+    font-size:16px;
+    padding:10px 16px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    margin-bottom:8px;
+  }
+  details[open] summary{border-radius:14px 14px 0 0;margin-bottom:0;}
+  details[open] .card{border-radius:0 0 14px 14px;border-top:none;}
+  details h3{margin:16px 0 6px;font-size:15px;}
+  details ul{margin:4px 0;padding-left:22px;}
+  details li{margin:3px 0;font-size:14px;}
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    padding:0 16px 34px;
+    line-height:1.6;
+  }
+  footer a{color:var(--blue);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>360 User Stories – The Story Wheel</h1>
+  <p>Ein Erzählspiel über Berufs- und Arbeitssituationen im agilen Kontext · kein Gewinnen, kein Ende – nur Geschichten</p>
+</header>
+
+<div class="layout">
+
+  <!-- STEP 1: big wheel -->
+  <div class="card" id="card1">
+    <h2><span class="stepnum">1</span> Direction – Das große Rad</h2>
+    <div class="wheelwrap" id="wheel1wrap">
+      <svg id="wheel1" viewBox="0 0 1000 1000" role="img" aria-label="Großes Themenrad mit vier Ringen"></svg>
+    </div>
+    <div class="controls">
+      <button class="primary" id="spin1">Drehen</button>
+      <button class="stop" id="stop1" disabled>Stopp!</button>
+    </div>
+    <p class="hint">Der/die Erzähler:in dreht mit geschlossenen Augen – jemand anderes ruft <b>„Stopp!“</b></p>
+  </div>
+
+  <div class="rightcol">
+
+    <div class="smallwheels">
+      <!-- STEP 2: color wheel -->
+      <div class="card inactive" id="card2">
+        <h2><span class="stepnum">2</span> Color</h2>
+        <div class="wheelwrap" id="wheel2wrap">
+          <svg id="wheel2" viewBox="0 0 300 300" role="img" aria-label="Farbrad"></svg>
+        </div>
+        <div class="controls">
+          <button class="primary" id="spin2" disabled>Drehen</button>
+          <button class="stop" id="stop2" disabled>Stopp!</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: category wheel -->
+      <div class="card inactive" id="card3">
+        <h2><span class="stepnum">3</span> Category</h2>
+        <div class="wheelwrap" id="wheel3wrap">
+          <svg id="wheel3" viewBox="0 0 300 300" role="img" aria-label="Kategorierad"></svg>
+        </div>
+        <div class="controls">
+          <button class="primary" id="spin3" disabled>Drehen</button>
+          <button class="stop" id="stop3" disabled>Stopp!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="card" id="resultCard">
+      <h2><span class="stepnum" style="background:var(--ink)">★</span> Deine Story</h2>
+      <div id="topicArea">
+        <p class="placeholder" id="topicPlaceholder">Dreh zuerst das große Rad – der Pfeil zeigt auf bis zu vier mögliche Themen.</p>
+        <div class="topics" id="topics" hidden></div>
+        <p class="hint" id="colorHint" hidden></p>
+      </div>
+      <div class="story" id="story" hidden></div>
+      <div class="controls">
+        <button id="resetBtn">Neue Runde</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<details>
+  <summary>Spielregeln – How to Play</summary>
+  <div class="card">
+    <p><i>Basierend auf „360 Stories“ von Wilma Mulder (<a href="https://www.360stories.one" target="_blank" rel="noopener">www.360stories.one</a>), für Job-Situationen im agilen Kontext adaptiert von Udo Wiegärtner.</i></p>
+
+    <h3>Zweck</h3>
+    <ul>
+      <li>Hilft, Geschichten über die eigene Berufslaufbahn und Arbeitssituationen zu teilen.</li>
+      <li>Persönlich, bedeutsam und wertschätzend – kein Übertrumpfen.</li>
+    </ul>
+
+    <h3>So wird gespielt – drei Schritte nacheinander</h3>
+    <ul>
+      <li><b>Schritt 1 – Direction (Rad 1):</b> Der/die nächste Erzähler:in startet das große Rad mit geschlossenen Augen. Jemand anderes ruft „Stopp!“. Der Pfeil zeigt auf bis zu vier mögliche Themen (eines pro Ring).</li>
+      <li><b>Schritt 2 – Color (Rad 2):</b> Das Farbrad bestimmt, zu welchem der vier Themen erzählt wird – die Farbe entspricht dem Ring.
+        <ul>
+          <li><b>Schwarz = Blackbox:</b> Die Mitspieler:innen wählen eines der vier Themen für dich aus.</li>
+          <li><b>Weiß = Wildcard:</b> Du wählst selbst eines der vier Themen aus.</li>
+        </ul>
+      </li>
+      <li><b>Schritt 3 – Category (Rad 3):</b> Bestimmt, welche Art von Geschichte gewünscht ist:
+        <ul>
+          <li><b>First</b> – Was verbindest du mit dem allerersten Mal in diesem Kontext?</li>
+          <li><b>Last</b> – Was verbindest du mit dem letzten / jüngsten Mal?</li>
+          <li><b>Best</b> – Was war ein großartiger Moment in diesem Kontext?</li>
+          <li><b>Worst</b> – Was war ein schwieriger Moment in diesem Kontext?</li>
+          <li><b>Advise</b> – Welchen Rat würdest du zu diesem Thema geben?</li>
+          <li><b>?</b> – Freie Wahl: Erzähl, was dir dazu einfällt.</li>
+        </ul>
+      </li>
+      <li>Geschichten dauern meist 2–3 Minuten.</li>
+    </ul>
+
+    <h3>Ein paar Tipps fürs Erzählen</h3>
+    <ul>
+      <li>Geschichten nicht kommentieren – einfach zuhören.</li>
+      <li>Keine Nachfragen.</li>
+      <li>Kein „Oh, mir ist mal etwas Ähnliches passiert…“ – gib der Geschichte den Raum, den sie verdient.</li>
+    </ul>
+
+    <h3>Kein Gewinnen, kein Ende</h3>
+    <ul>
+      <li>Es gibt kein Ziel und keine Ziellinie.</li>
+      <li>Spielt so lange, wie Menschen teilen möchten.</li>
+      <li>Nach jeder Geschichte: einfach „Danke fürs Teilen“ sagen – dann ist die nächste Person dran.</li>
+    </ul>
+  </div>
+</details>
+
+<footer>
+  <b>360 User Stories</b> – zusammengestellt von Udo Wiegärtner.<br>
+  Inspiration und Copyright der Grundidee: „360 Stories“ von Wilma Mulder (<a href="https://www.360stories.one" target="_blank" rel="noopener">www.360stories.one</a>)
+</footer>
+
+<script>
+"use strict";
+
+/* ============================== Daten ============================== */
+
+const COLORS = {
+  red:   "#a03c3c",
+  gold:  "#c39434",
+  green: "#55815f",
+  blue:  "#2f6e91",
+  band:  "#e9dfc6",
+  board: "#f8f4ec",
+  ink:   "#1f1c17"
+};
+
+/* Ring-Inhalte, im Uhrzeigersinn ab 12 Uhr */
+const RING_BLUE = ["Respect","Bug","Autonomy","Courage","Challenge","Happiness","Home Office","Beginnings",
+                   "Play","Commitment","Carreer","Balance","Dogma","Failure","Requirement","Effort",
+                   "Estimation","Fear","Doubt","Communication","Debt","Mastery","Passion","Learning",
+                   "Focus","Shame","Sprint","Retrospective","Meeting","Planning","Delivering","Transparency"];
+const RING_GREEN = ["Conflict","Growing","Profit","Vision","Strategy","Salary","Society","Economy",
+                    "Pandemic","HR","Scrum","Mindset","Motivation","Frustration","Quality","Trust"];
+const RING_GOLD  = ["Leader","Manager","Team","Scrum Master","Mentor","User","Product Owner","Tester"];
+const RING_RED   = ["People","Process","Product","Purpose"];
+
+const RING_NAMES = {blue:"Außenring", green:"Grüner Ring", gold:"Goldener Ring", red:"Innenring"};
+
+/* Farbrad, im Uhrzeigersinn; Sektor 0 mittig oben */
+const COLOR_SEGS = [
+  {key:"blue",  fill:COLORS.blue},
+  {key:"gold",  fill:COLORS.gold},
+  {key:"white", fill:"#ffffff"},
+  {key:"red",   fill:COLORS.red},
+  {key:"green", fill:COLORS.green},
+  {key:"black", fill:"#1a1a1a"}
+];
+
+/* Kategorierad, im Uhrzeigersinn; Sektor 0 mittig oben */
+const CATEGORIES = [
+  {label:"First",  expl:"Was verbindest du mit dem allerersten Mal in diesem Kontext?"},
+  {label:"Last",   expl:"Was verbindest du mit dem letzten / jüngsten Mal in diesem Kontext?"},
+  {label:"Best",   expl:"Was war ein großartiger Moment in diesem Kontext?"},
+  {label:"Worst",  expl:"Was war ein schwieriger Moment in diesem Kontext?"},
+  {label:"Advise", expl:"Welchen Rat würdest du zu diesem Thema geben?"},
+  {label:"?",      expl:"Freie Wahl – erzähl, was dir zu diesem Thema einfällt."}
+];
+
+/* ============================== SVG-Helfer ============================== */
+
+const SVGNS = "http://www.w3.org/2000/svg";
+
+function el(name, attrs, parent){
+  const n = document.createElementNS(SVGNS, name);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+/* Winkel in Grad, im Uhrzeigersinn ab 12 Uhr */
+function pt(cx, cy, r, aDeg){
+  const a = aDeg * Math.PI / 180;
+  return [cx + r * Math.sin(a), cy - r * Math.cos(a)];
+}
+
+/* Ringsegment (Kreisring-Ausschnitt) von a0 bis a1 */
+function wedgePath(cx, cy, r0, r1, a0, a1){
+  const large = (a1 - a0) > 180 ? 1 : 0;
+  const [x0o,y0o] = pt(cx,cy,r1,a0), [x1o,y1o] = pt(cx,cy,r1,a1);
+  const [x1i,y1i] = pt(cx,cy,r0,a1), [x0i,y0i] = pt(cx,cy,r0,a0);
+  return `M ${x0o} ${y0o} A ${r1} ${r1} 0 ${large} 1 ${x1o} ${y1o} ` +
+         `L ${x1i} ${y1i} A ${r0} ${r0} 0 ${large} 0 ${x0i} ${y0i} Z`;
+}
+
+/* Bogenpfad für Beschriftungen; in der unteren Hälfte umgedreht, damit Text lesbar bleibt */
+function labelArc(cx, cy, r, a0, a1){
+  const mid = (a0 + a1) / 2 % 360;
+  const flipped = mid > 90 && mid < 270;
+  if (flipped){
+    const [xs,ys] = pt(cx,cy,r,a1), [xe,ye] = pt(cx,cy,r,a0);
+    return `M ${xs} ${ys} A ${r} ${r} 0 0 0 ${xe} ${ye}`;
+  }
+  const [xs,ys] = pt(cx,cy,r,a0), [xe,ye] = pt(cx,cy,r,a1);
+  return `M ${xs} ${ys} A ${r} ${r} 0 0 1 ${xe} ${ye}`;
+}
+
+let pathId = 0;
+
+function ringLabel(svg, defs, cx, cy, r, a0, a1, text, maxFont){
+  const arcLen = r * (a1 - a0) * Math.PI / 180;
+  const fs = Math.min(maxFont, (arcLen - 14) / (text.length * 0.62));
+  const id = "lp" + (pathId++);
+  el("path", {id, d: labelArc(cx,cy,r,a0,a1), fill:"none"}, defs);
+  const t = el("text", {
+    "font-size": fs.toFixed(1),
+    "font-weight": "700",
+    fill: "#fff",
+    "dominant-baseline": "middle"
+  }, svg);
+  const tp = el("textPath", {href: "#"+id, startOffset: "50%", "text-anchor": "middle"}, t);
+  tp.textContent = text;
+}
+
+/* ============================== Rad 1: großes Rad ============================== */
+
+function buildBigWheel(){
+  const svg = document.getElementById("wheel1");
+  const cx = 500, cy = 500;
+  const defs = el("defs", {}, svg);
+
+  el("circle", {cx, cy, r:495, fill:COLORS.board, stroke:COLORS.ink, "stroke-width":2}, svg);
+
+  const rings = [
+    {items:RING_RED,   r0:150, r1:215, color:COLORS.red,   maxFont:34},
+    {items:RING_GOLD,  r0:245, r1:308, color:COLORS.gold,  maxFont:27},
+    {items:RING_GREEN, r0:338, r1:400, color:COLORS.green, maxFont:23},
+    {items:RING_BLUE,  r0:428, r1:488, color:COLORS.blue,  maxFont:18}
+  ];
+
+  for (const ring of rings){
+    const n = ring.items.length, step = 360 / n;
+    for (let i=0; i<n; i++){
+      const a0 = i*step, a1 = (i+1)*step;
+      el("path", {
+        d: wedgePath(cx,cy,ring.r0,ring.r1,a0,a1),
+        fill: ring.color, stroke: COLORS.board, "stroke-width": 2.5
+      }, svg);
+      ringLabel(svg, defs, cx, cy, (ring.r0+ring.r1)/2, a0, a1, ring.items[i], ring.maxFont);
+    }
+  }
+
+  /* Trennlinien des Außenrings ragen leicht nach außen (wie im Original) */
+  for (let i=0; i<32; i++){
+    const a = i * 11.25;
+    const [x0,y0] = pt(cx,cy,420,a), [x1,y1] = pt(cx,cy,494,a);
+    el("line", {x1:x0, y1:y0, x2:x1, y2:y1, stroke:"#3a352c", "stroke-width":1, opacity:.35}, svg);
+  }
+
+  /* Nabe */
+  el("circle", {cx, cy, r:145, fill:COLORS.board}, svg);
+
+  /* Hervorhebung des Ergebnis-Sektors */
+  const hl = el("path", {id:"sectorHighlight", fill:"rgba(31,28,23,.07)", stroke:COLORS.ink,
+                         "stroke-width":5, "stroke-linejoin":"round", visibility:"hidden"}, svg);
+
+  /* Pfeil: schwarzer Zeiger mit hellem Gegengewicht */
+  const arrow = el("g", {id:"arrow1"}, svg);
+  el("rect", {x:cx-5, y:cy-30, width:10, height:330, rx:5, fill:"#d7d2c6",
+              stroke:"#9a948a", "stroke-width":1}, arrow);
+  el("rect", {x:cx-7, y:cy-430, width:14, height:440, rx:6, fill:"#181818"}, arrow);
+  el("path", {d:`M ${cx} ${cy-482} L ${cx-24} ${cy-418} L ${cx+24} ${cy-418} Z`, fill:"#181818"}, arrow);
+  el("circle", {cx, cy, r:16, fill:"#181818"}, arrow);
+  el("circle", {cx, cy, r:6, fill:"#d7d2c6"}, arrow);
+
+  return {svg, arrow, highlight: hl, cx, cy};
+}
+
+/* ============================== Rad 2: Farbrad ============================== */
+
+function buildColorWheel(){
+  const svg = document.getElementById("wheel2");
+  const cx = 150, cy = 150, R = 140;
+
+  el("circle", {cx, cy, r:R, fill:COLORS.band, stroke:"#3a352c", "stroke-width":1.5}, svg);
+
+  for (let i=0; i<6; i++){
+    const a0 = i*60 - 30, a1 = a0 + 60;
+    el("path", {d: wedgePath(cx,cy,0,R,a0,a1), fill:"none", stroke:"#3a352c", "stroke-width":1}, svg);
+    const [dx,dy] = pt(cx,cy,88,(a0+a1)/2);
+    const seg = COLOR_SEGS[i];
+    el("circle", {cx:dx, cy:dy, r:22, fill:seg.fill,
+                  stroke: seg.key==="white" ? "#3a352c" : "rgba(0,0,0,.25)",
+                  "stroke-width": seg.key==="white" ? 1.5 : 1}, svg);
+  }
+
+  const arrow = el("g", {id:"arrow2"}, svg);
+  el("rect", {x:cx-2.5, y:cy-10, width:5, height:70, rx:2.5, fill:"#d7d2c6",
+              stroke:"#9a948a", "stroke-width":.75}, arrow);
+  el("rect", {x:cx-4, y:cy-115, width:8, height:120, rx:4, fill:"#181818"}, arrow);
+  el("path", {d:`M ${cx} ${cy-138} L ${cx-12} ${cy-108} L ${cx+12} ${cy-108} Z`, fill:"#181818"}, arrow);
+  el("circle", {cx, cy, r:8, fill:"#181818"}, arrow);
+  el("circle", {cx, cy, r:3, fill:"#d7d2c6"}, arrow);
+
+  return {svg, arrow, cx, cy};
+}
+
+/* ============================== Rad 3: Kategorierad ============================== */
+
+function buildCategoryWheel(){
+  const svg = document.getElementById("wheel3");
+  const cx = 150, cy = 150, R = 140;
+
+  el("circle", {cx, cy, r:R, fill:COLORS.band, stroke:"#3a352c", "stroke-width":1.5}, svg);
+
+  for (let i=0; i<6; i++){
+    const a0 = i*60 - 30, a1 = a0 + 60;
+    el("path", {d: wedgePath(cx,cy,0,R,a0,a1), fill:"none", stroke:"#3a352c", "stroke-width":1}, svg);
+    const [tx,ty] = pt(cx,cy,92,(a0+a1)/2);
+    const t = el("text", {x:tx, y:ty, "text-anchor":"middle", "dominant-baseline":"middle",
+                          "font-size":19, "font-weight":700, fill:COLORS.ink}, svg);
+    t.textContent = CATEGORIES[i].label;
+  }
+
+  const arrow = el("g", {id:"arrow3"}, svg);
+  el("rect", {x:cx-2.5, y:cy-10, width:5, height:70, rx:2.5, fill:"#d7d2c6",
+              stroke:"#9a948a", "stroke-width":.75}, arrow);
+  el("rect", {x:cx-4, y:cy-115, width:8, height:120, rx:4, fill:"#181818"}, arrow);
+  el("path", {d:`M ${cx} ${cy-138} L ${cx-12} ${cy-108} L ${cx+12} ${cy-108} Z`, fill:"#181818"}, arrow);
+  el("circle", {cx, cy, r:8, fill:"#181818"}, arrow);
+  el("circle", {cx, cy, r:3, fill:"#d7d2c6"}, arrow);
+
+  return {svg, arrow, cx, cy};
+}
+
+/* ============================== Spinner-Mechanik ============================== */
+
+const spinners = [];
+
+class Spinner {
+  constructor(arrowEl, cx, cy, onDone){
+    this.arrow = arrowEl;
+    this.cx = cx; this.cy = cy;
+    this.onDone = onDone;
+    this.angle = Math.random() * 360;
+    this.vel = 0;
+    this.state = "idle";           /* idle | spinning | stopping */
+    this.render();
+    spinners.push(this);
+  }
+  start(){
+    this.vel = 11 + Math.random() * 7;   /* Grad pro Frame */
+    this.state = "spinning";
+  }
+  stop(){
+    if (this.state === "spinning") this.state = "stopping";
+  }
+  tick(){
+    if (this.state === "idle") return;
+    if (this.state === "stopping"){
+      this.vel *= 0.975;
+      if (this.vel < 0.04){
+        this.vel = 0;
+        this.state = "idle";
+        this.angle = ((this.angle % 360) + 360) % 360;
+        this.render();
+        this.onDone(this.angle);
+        return;
+      }
+    }
+    this.angle += this.vel;
+    this.render();
+  }
+  render(){
+    this.arrow.setAttribute("transform", `rotate(${this.angle % 360} ${this.cx} ${this.cy})`);
+  }
+}
+
+function loop(){
+  for (const s of spinners) s.tick();
+  requestAnimationFrame(loop);
+}
+
+/* ============================== Spielzustand & UI ============================== */
+
+const state = { sector:null, color:null, topic:null, category:null };
+
+const big = buildBigWheel();
+const colWheel = buildColorWheel();
+const catWheel = buildCategoryWheel();
+
+const $ = id => document.getElementById(id);
+
+function setButtons(n, spinning){
+  $("spin"+n).disabled = spinning;
+  $("stop"+n).disabled = !spinning;
+}
+
+function stepCard(n, active, done){
+  const c = $("card"+n);
+  c.classList.toggle("inactive", !active);
+  c.classList.toggle("done", !!done);
+}
+
+/* --- Ergebnis von Rad 1: Sektor mit bis zu 4 Themen --- */
+function directionDone(angle){
+  setButtons(1, false);
+  const i32 = Math.floor((angle % 360) / 11.25) % 32;
+  state.sector = i32;
+  state.color = null; state.topic = null; state.category = null;
+
+  /* Sektor hervorheben */
+  const a0 = i32 * 11.25, a1 = a0 + 11.25;
+  big.highlight.setAttribute("d", wedgePath(big.cx, big.cy, 148, 490, a0, a1));
+  big.highlight.setAttribute("visibility", "visible");
+
+  renderTopics();
+  renderStory();
+  stepCard(1, true, true);
+  stepCard(2, true, false);
+  stepCard(3, false, false);
+  $("spin2").disabled = false;
+  $("spin3").disabled = true;
+}
+
+function sectorTopics(){
+  const i = state.sector;
+  return [
+    {ring:"blue",  color:COLORS.blue,  label:RING_BLUE [i]},
+    {ring:"green", color:COLORS.green, label:RING_GREEN[Math.floor(i/2)]},
+    {ring:"gold",  color:COLORS.gold,  label:RING_GOLD [Math.floor(i/4)]},
+    {ring:"red",   color:COLORS.red,   label:RING_RED  [Math.floor(i/8)]}
+  ];
+}
+
+function renderTopics(){
+  const box = $("topics");
+  const ph = $("topicPlaceholder");
+  const hint = $("colorHint");
+  box.innerHTML = "";
+  if (state.sector === null){
+    box.hidden = true; ph.hidden = false; hint.hidden = true;
+    return;
+  }
+  ph.hidden = true; box.hidden = false;
+
+  const manual = state.color === "black" || state.color === "white";
+  for (const t of sectorTopics()){
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.innerHTML = `<span class="dot" style="background:${t.color}"></span>` +
+                     `<span>${t.label}</span><span class="ringname">${RING_NAMES[t.ring]}</span>`;
+    if (state.topic){
+      if (state.topic === t.label) chip.classList.add("chosen");
+      else chip.classList.add("dimmed");
+    }
+    if (manual){
+      chip.classList.add("selectable");
+      chip.addEventListener("click", () => {
+        state.topic = t.label;
+        renderTopics();
+        renderStory();
+      });
+    } else if (state.color && state.color === t.ring){
+      chip.classList.add("chosen");
+    }
+    box.appendChild(chip);
+  }
+
+  if (state.color === "black"){
+    hint.hidden = false;
+    hint.innerHTML = "<b>Schwarz = Blackbox:</b> Deine Mitspieler:innen wählen eines der vier Themen für dich – klickt es an.";
+  } else if (state.color === "white"){
+    hint.hidden = false;
+    hint.innerHTML = "<b>Weiß = Wildcard:</b> Du wählst selbst eines der vier Themen – klick es an.";
+  } else {
+    hint.hidden = true;
+  }
+}
+
+/* --- Ergebnis von Rad 2: Farbe --- */
+function colorDone(angle){
+  setButtons(2, false);
+  const i6 = Math.floor((((angle % 360) + 30) % 360) / 60) % 6;
+  const seg = COLOR_SEGS[i6];
+  state.color = seg.key;
+  if (seg.key === "black" || seg.key === "white"){
+    state.topic = null;                     /* wird per Klick gewählt */
+  } else {
+    const t = sectorTopics().find(t => t.ring === seg.key);
+    state.topic = t ? t.label : null;
+  }
+  renderTopics();
+  renderStory();
+  stepCard(2, true, true);
+  stepCard(3, true, false);
+  $("spin3").disabled = false;
+}
+
+/* --- Ergebnis von Rad 3: Kategorie --- */
+function categoryDone(angle){
+  setButtons(3, false);
+  const i6 = Math.floor((((angle % 360) + 30) % 360) / 60) % 6;
+  state.category = CATEGORIES[i6];
+  renderStory();
+  stepCard(3, true, true);
+}
+
+function renderStory(){
+  const box = $("story");
+  const card = $("resultCard");
+  if (!state.category){
+    box.hidden = true;
+    card.classList.remove("ready");
+    return;
+  }
+  box.hidden = false;
+  const cat = state.category;
+  if (state.topic){
+    box.innerHTML = `Erzähle deine <b>„${cat.label}“</b>-Geschichte zum Thema <b>„${state.topic}“</b>.` +
+                    `<span class="catexpl">${cat.expl}</span>`;
+    card.classList.add("ready");
+  } else {
+    box.innerHTML = `Kategorie: <b>„${cat.label}“</b> – <span class="catexpl" style="display:inline">${cat.expl}</span>` +
+                    `<span class="catexpl">Wähle noch das Thema aus (Schritt 2).</span>`;
+    card.classList.remove("ready");
+  }
+}
+
+/* ============================== Verkabelung ============================== */
+
+const sp1 = new Spinner(big.arrow, big.cx, big.cy, directionDone);
+const sp2 = new Spinner(colWheel.arrow, colWheel.cx, colWheel.cy, colorDone);
+const sp3 = new Spinner(catWheel.arrow, catWheel.cx, catWheel.cy, categoryDone);
+
+function wire(n, sp, allowed){
+  $("spin"+n).addEventListener("click", () => {
+    if (!allowed()) return;
+    if (n === 1) big.highlight.setAttribute("visibility", "hidden");
+    sp.start();
+    setButtons(n, true);
+  });
+  $("stop"+n).addEventListener("click", () => sp.stop());
+  $("wheel"+n+"wrap").addEventListener("click", () => {
+    if (!allowed()) return;
+    if (sp.state === "spinning"){ sp.stop(); return; }
+    if (sp.state === "idle"){
+      if (n === 1) big.highlight.setAttribute("visibility", "hidden");
+      sp.start();
+      setButtons(n, true);
+    }
+  });
+}
+
+wire(1, sp1, () => true);
+wire(2, sp2, () => state.sector !== null);
+wire(3, sp3, () => state.sector !== null && state.color !== null);
+
+$("resetBtn").addEventListener("click", () => {
+  state.sector = null; state.color = null; state.topic = null; state.category = null;
+  big.highlight.setAttribute("visibility", "hidden");
+  renderTopics();
+  renderStory();
+  stepCard(1, true, false);
+  stepCard(2, false, false);
+  stepCard(3, false, false);
+  $("spin1").disabled = false; $("stop1").disabled = true;
+  $("spin2").disabled = true;  $("stop2").disabled = true;
+  $("spin3").disabled = true;  $("stop3").disabled = true;
+});
+
+loop();
+</script>
+</body>
+</html>
