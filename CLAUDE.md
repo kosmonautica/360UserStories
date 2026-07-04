@@ -37,9 +37,12 @@ Plain vanilla JS, no frameworks. The three wheels are SVGs generated at load tim
   random velocity and arms an auto-stop timeout (~0.8–2.2 s); `stop()` switches to friction decay
   (×0.968/frame) until rest, then calls the per-wheel `onDone(angle)` callback. One global rAF
   loop ticks all spinners.
-- **Game flow/state:** `state = {sector, color, topic, category}`. Callbacks: `directionDone` →
-  `colorDone` → `categoryDone`. Steps are gated via disabled buttons; respinning an earlier wheel
-  resets downstream results. `pointTo(id)` smooth-scrolls to the next step's card and pulses it.
+- **Game flow/state:** `state = {sector, color, topic, category, catPick}`. Callbacks:
+  `directionDone` → `colorDone` → `categoryDone`. Steps are gated via disabled buttons; respinning
+  an earlier wheel resets downstream results. `pointTo(id)` smooth-scrolls to the next step's card
+  and pulses it. Landing on **“?”** on the category wheel works like black/white on the color
+  wheel: `state.category` stays null, `catPick` turns on, and `renderCategoryPick()` renders a
+  banner plus five tappable category chips into `#categoryPick` (in card 3).
 - **Topic display:** `renderTopics()` renders the four topic chips into **two** places –
   `#wheelTopics` (under the big wheel) and `#topics` (in the “Your Story” card) – plus the
   Blackbox/Wildcard `pickbanner` into `#wheelColorHint`/`#colorHint`. On black/white the chips are
