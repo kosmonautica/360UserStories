@@ -159,6 +159,17 @@
     box-shadow:0 2px 6px rgba(0,0,0,.12);
   }
   .chip.dimmed{opacity:.4;}
+  .wheeltopics{margin-top:12px;}
+  .wheeltopics .label{
+    font-size:13px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    color:var(--muted);
+    margin:0 0 6px;
+    text-align:center;
+  }
+  .wheeltopics .chip{font-size:16px;}
   #resultCard{border-width:2px;}
   #resultCard.ready{border-color:var(--red);}
   .story{
@@ -250,6 +261,10 @@
       <button class="stop" id="stop1" disabled>Stop!</button>
     </div>
     <p class="hint">The wheel stops on its own after a short while – hit <b>“Stop!”</b> to stop it earlier.</p>
+    <div class="wheeltopics" id="wheelTopicsWrap" hidden>
+      <p class="label">The arrow points to these topics:</p>
+      <div class="topics" id="wheelTopics"></div>
+    </div>
   </div>
 
   <div class="rightcol">
@@ -491,9 +506,13 @@ function buildBigWheel(){
   /* Hub */
   el("circle", {cx, cy, r:145, fill:COLORS.board}, svg);
 
+  /* Dim everything except the resulting sector (even-odd hole) */
+  const dim = el("path", {id:"wheelDim", fill:"rgba(248,244,236,.8)", "fill-rule":"evenodd",
+                          "pointer-events":"none", visibility:"hidden"}, svg);
+
   /* Highlight for the resulting sector */
-  const hl = el("path", {id:"sectorHighlight", fill:"rgba(31,28,23,.07)", stroke:COLORS.ink,
-                         "stroke-width":5, "stroke-linejoin":"round", visibility:"hidden"}, svg);
+  const hl = el("path", {id:"sectorHighlight", fill:"none", stroke:COLORS.ink,
+                         "stroke-width":6, "stroke-linejoin":"round", visibility:"hidden"}, svg);
 
   /* Arrow: black pointer with light counterweight */
   const arrow = el("g", {id:"arrow1"}, svg);
@@ -504,7 +523,7 @@ function buildBigWheel(){
   el("circle", {cx, cy, r:16, fill:"#181818"}, arrow);
   el("circle", {cx, cy, r:6, fill:"#d7d2c6"}, arrow);
 
-  return {svg, arrow, highlight: hl, cx, cy};
+  return {svg, arrow, highlight: hl, dim, cx, cy};
 }
 
 /* ============================== Wheel 2: color wheel ============================== */
@@ -655,9 +674,15 @@ function directionDone(angle){
   state.sector = i32;
   state.color = null; state.topic = null; state.category = null;
 
-  /* highlight the sector */
+  /* highlight the sector: dim the rest of the wheel, outline the hit */
   const a0 = i32 * 11.25, a1 = a0 + 11.25;
-  big.highlight.setAttribute("d", wedgePath(big.cx, big.cy, 148, 490, a0, a1));
+  const sector = wedgePath(big.cx, big.cy, 148, 490, a0, a1);
+  const R = 494;
+  const fullCircle = `M ${big.cx} ${big.cy - R} A ${R} ${R} 0 1 1 ${big.cx} ${big.cy + R} ` +
+                     `A ${R} ${R} 0 1 1 ${big.cx} ${big.cy - R} Z`;
+  big.dim.setAttribute("d", fullCircle + " " + sector);
+  big.dim.setAttribute("visibility", "visible");
+  big.highlight.setAttribute("d", sector);
   big.highlight.setAttribute("visibility", "visible");
 
   renderTopics();
@@ -680,39 +705,48 @@ function sectorTopics(){
   ];
 }
 
+function makeChip(t, manual){
+  const chip = document.createElement("div");
+  chip.className = "chip";
+  chip.innerHTML = `<span class="dot" style="background:${t.color}"></span>` +
+                   `<span>${t.label}</span><span class="ringname">${RING_NAMES[t.ring]}</span>`;
+  if (state.topic){
+    if (state.topic === t.label) chip.classList.add("chosen");
+    else chip.classList.add("dimmed");
+  }
+  if (manual){
+    chip.classList.add("selectable");
+    chip.addEventListener("click", () => {
+      state.topic = t.label;
+      renderTopics();
+      renderStory();
+      if (!state.category) pointTo("card3");
+    });
+  } else if (state.color && state.color === t.ring){
+    chip.classList.add("chosen");
+  }
+  return chip;
+}
+
 function renderTopics(){
   const box = $("topics");
+  const wheelBox = $("wheelTopics");
+  const wheelWrap = $("wheelTopicsWrap");
   const ph = $("topicPlaceholder");
   const hint = $("colorHint");
   box.innerHTML = "";
+  wheelBox.innerHTML = "";
   if (state.sector === null){
     box.hidden = true; ph.hidden = false; hint.hidden = true;
+    wheelWrap.hidden = true;
     return;
   }
-  ph.hidden = true; box.hidden = false;
+  ph.hidden = true; box.hidden = false; wheelWrap.hidden = false;
 
   const manual = state.color === "black" || state.color === "white";
   for (const t of sectorTopics()){
-    const chip = document.createElement("div");
-    chip.className = "chip";
-    chip.innerHTML = `<span class="dot" style="background:${t.color}"></span>` +
-                     `<span>${t.label}</span><span class="ringname">${RING_NAMES[t.ring]}</span>`;
-    if (state.topic){
-      if (state.topic === t.label) chip.classList.add("chosen");
-      else chip.classList.add("dimmed");
-    }
-    if (manual){
-      chip.classList.add("selectable");
-      chip.addEventListener("click", () => {
-        state.topic = t.label;
-        renderTopics();
-        renderStory();
-        if (!state.category) pointTo("card3");
-      });
-    } else if (state.color && state.color === t.ring){
-      chip.classList.add("chosen");
-    }
-    box.appendChild(chip);
+    box.appendChild(makeChip(t, manual));
+    wheelBox.appendChild(makeChip(t, manual));
   }
 
   if (state.color === "black"){
@@ -784,9 +818,15 @@ const sp2 = new Spinner(colWheel.arrow, colWheel.cx, colWheel.cy, colorDone);
 const sp3 = new Spinner(catWheel.arrow, catWheel.cx, catWheel.cy, categoryDone);
 
 function wire(n, sp, allowed){
+  const hideMarkers = () => {
+    if (n === 1){
+      big.highlight.setAttribute("visibility", "hidden");
+      big.dim.setAttribute("visibility", "hidden");
+    }
+  };
   $("spin"+n).addEventListener("click", () => {
     if (!allowed()) return;
-    if (n === 1) big.highlight.setAttribute("visibility", "hidden");
+    hideMarkers();
     sp.start();
     setButtons(n, true);
   });
@@ -795,7 +835,7 @@ function wire(n, sp, allowed){
     if (!allowed()) return;
     if (sp.state === "spinning"){ sp.stop(); return; }
     if (sp.state === "idle"){
-      if (n === 1) big.highlight.setAttribute("visibility", "hidden");
+      hideMarkers();
       sp.start();
       setButtons(n, true);
     }
@@ -809,6 +849,7 @@ wire(3, sp3, () => state.sector !== null && state.color !== null);
 $("resetBtn").addEventListener("click", () => {
   state.sector = null; state.color = null; state.topic = null; state.category = null;
   big.highlight.setAttribute("visibility", "hidden");
+  big.dim.setAttribute("visibility", "hidden");
   renderTopics();
   renderStory();
   stepCard(1, true, false);
