@@ -172,6 +172,32 @@
     color:var(--muted);
     font-size:14px;
   }
+  .storybox{
+    background:var(--red);
+    color:#fff;
+    border-radius:14px;
+    padding:20px 22px;
+    margin-top:12px;
+    text-align:center;
+    font-size:clamp(22px,5.5vw,30px);
+    font-weight:700;
+    line-height:1.35;
+    box-shadow:0 4px 14px rgba(120,40,40,.35);
+  }
+  .storybox b{color:#ffd9a0;}
+  .storybox .catexpl{
+    display:block;
+    margin-top:12px;
+    color:rgba(255,255,255,.92);
+    font-size:clamp(15px,3.5vw,17px);
+    font-weight:400;
+    line-height:1.45;
+  }
+  @keyframes pulseCard{
+    0%{box-shadow:0 0 0 0 rgba(160,60,60,.6);}
+    100%{box-shadow:0 0 0 20px rgba(160,60,60,0);}
+  }
+  .card.attention{animation:pulseCard 1s ease-out 3;}
   .placeholder{color:var(--muted);font-size:14px;}
   details{
     max-width:1400px;
@@ -612,6 +638,16 @@ function stepCard(n, active, done){
   c.classList.toggle("done", !!done);
 }
 
+/* Zum nächsten Schritt scrollen und den Kasten kurz pulsieren lassen */
+function pointTo(id){
+  const c = $(id);
+  c.scrollIntoView({behavior:"smooth", block:"nearest"});
+  c.classList.remove("attention");
+  void c.offsetWidth;               /* Animation neu starten */
+  c.classList.add("attention");
+  c.addEventListener("animationend", () => c.classList.remove("attention"), {once:true});
+}
+
 /* --- Ergebnis von Rad 1: Sektor mit bis zu 4 Themen --- */
 function directionDone(angle){
   setButtons(1, false);
@@ -631,6 +667,7 @@ function directionDone(angle){
   stepCard(3, false, false);
   $("spin2").disabled = false;
   $("spin3").disabled = true;
+  pointTo("card2");
 }
 
 function sectorTopics(){
@@ -670,6 +707,7 @@ function renderTopics(){
         state.topic = t.label;
         renderTopics();
         renderStory();
+        if (!state.category) pointTo("card3");
       });
     } else if (state.color && state.color === t.ring){
       chip.classList.add("chosen");
@@ -705,6 +743,7 @@ function colorDone(angle){
   stepCard(2, true, true);
   stepCard(3, true, false);
   $("spin3").disabled = false;
+  pointTo(state.topic ? "card3" : "resultCard");
 }
 
 /* --- Ergebnis von Rad 3: Kategorie --- */
@@ -714,6 +753,7 @@ function categoryDone(angle){
   state.category = CATEGORIES[i6];
   renderStory();
   stepCard(3, true, true);
+  pointTo("resultCard");
 }
 
 function renderStory(){
@@ -727,8 +767,8 @@ function renderStory(){
   box.hidden = false;
   const cat = state.category;
   if (state.topic){
-    box.innerHTML = `Erzähle deine <b>„${cat.label}“</b>-Geschichte zum Thema <b>„${state.topic}“</b>.` +
-                    `<span class="catexpl">${cat.expl}</span>`;
+    box.innerHTML = `<div class="storybox">Erzähle deine <b>„${cat.label}“</b>-Geschichte<br>zum Thema <b>„${state.topic}“</b>!` +
+                    `<span class="catexpl">${cat.expl}</span></div>`;
     card.classList.add("ready");
   } else {
     box.innerHTML = `Kategorie: <b>„${cat.label}“</b> – <span class="catexpl" style="display:inline">${cat.expl}</span>` +
