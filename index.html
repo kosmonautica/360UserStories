@@ -223,7 +223,7 @@
       <button class="primary" id="spin1">Drehen</button>
       <button class="stop" id="stop1" disabled>Stopp!</button>
     </div>
-    <p class="hint">Der/die Erzähler:in dreht mit geschlossenen Augen – jemand anderes ruft <b>„Stopp!“</b></p>
+    <p class="hint">Das Rad hält nach kurzer Zeit von selbst an – mit <b>„Stopp!“</b> kann es auch früher gestoppt werden.</p>
   </div>
 
   <div class="rightcol">
@@ -550,20 +550,25 @@ class Spinner {
     this.angle = Math.random() * 360;
     this.vel = 0;
     this.state = "idle";           /* idle | spinning | stopping */
+    this.autoStopTimer = null;
     this.render();
     spinners.push(this);
   }
   start(){
     this.vel = 11 + Math.random() * 7;   /* Grad pro Frame */
     this.state = "spinning";
+    /* Rad hält nach kurzer Zeit von selbst an */
+    clearTimeout(this.autoStopTimer);
+    this.autoStopTimer = setTimeout(() => this.stop(), 800 + Math.random() * 1400);
   }
   stop(){
+    clearTimeout(this.autoStopTimer);
     if (this.state === "spinning") this.state = "stopping";
   }
   tick(){
     if (this.state === "idle") return;
     if (this.state === "stopping"){
-      this.vel *= 0.975;
+      this.vel *= 0.968;
       if (this.vel < 0.04){
         this.vel = 0;
         this.state = "idle";
