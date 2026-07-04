@@ -172,6 +172,16 @@
   }
   .pickbanner.black{background:#1a1a1a;color:#fff;}
   .pickbanner.white{background:#fff;border:2px solid var(--ink);}
+  .catchip{display:block;}
+  .catchip .catname{font-weight:700;}
+  .catchip .catdesc{
+    display:block;
+    font-size:13px;
+    font-weight:400;
+    color:var(--muted);
+    margin-top:2px;
+    line-height:1.35;
+  }
   .chip.chosen{
     border-color:var(--ink);
     background:#fff;
@@ -363,6 +373,7 @@
           <button class="primary" id="spin3" disabled>Spin</button>
           <button class="stop" id="stop3" disabled>Stop!</button>
         </div>
+        <div id="categoryPick" hidden></div>
       </div>
     </div>
 
@@ -422,7 +433,7 @@
           <li><b>Best</b> – What was a great moment in this context?</li>
           <li><b>Worst</b> – What was a tough moment in this context?</li>
           <li><b>Advise</b> – What advice would you give on this topic?</li>
-          <li><b>?</b> – Your choice: tell whatever comes to mind.</li>
+          <li><b>?</b> – Your choice: you pick one of the five kinds yourself – tap it.</li>
         </ul>
       </li>
       <li>Stories usually take 2–3 minutes.</li>
@@ -721,7 +732,7 @@ function loop(){
 
 /* ============================== Game state & UI ============================== */
 
-const state = { sector:null, color:null, topic:null, category:null };
+const state = { sector:null, color:null, topic:null, category:null, catPick:false };
 
 const big = buildBigWheel();
 const colWheel = buildColorWheel();
@@ -871,10 +882,57 @@ function colorDone(angle){
 function categoryDone(angle){
   setButtons(3, false);
   const i6 = Math.floor((((angle % 360) + 30) % 360) / 60) % 6;
-  state.category = CATEGORIES[i6];
+  const cat = CATEGORIES[i6];
+  if (cat.label === "?"){
+    /* "?" = your choice: pick the kind of story yourself, like black/white in step 2 */
+    state.category = null;
+    state.catPick = true;
+  } else {
+    state.category = cat;
+    state.catPick = false;
+  }
+  renderCategoryPick();
   renderStory(true);
-  stepCard(3, true, true);
-  pointTo("resultCard");
+  stepCard(3, true, !!state.category);
+  pointTo(state.category ? "resultCard" : "card3");
+}
+
+function renderCategoryPick(){
+  const wrap = $("categoryPick");
+  wrap.innerHTML = "";
+  if (!state.catPick){ wrap.hidden = true; return; }
+  wrap.hidden = false;
+
+  if (!state.category){
+    const banner = document.createElement("div");
+    banner.className = "pickbanner white";
+    banner.innerHTML = `❓ <b>Your choice!</b> Pick the kind of story you want to tell –<br>tap it.`;
+    wrap.appendChild(banner);
+  }
+
+  const list = document.createElement("div");
+  list.className = "topics";
+  for (const c of CATEGORIES){
+    if (c.label === "?") continue;
+    const chip = document.createElement("div");
+    chip.className = "chip selectable catchip";
+    if (state.category){
+      if (state.category.label === c.label) chip.classList.add("chosen");
+      else chip.classList.add("dimmed");
+    } else {
+      chip.classList.add("pick");
+    }
+    chip.innerHTML = `<span class="catname">${c.label}</span><span class="catdesc">${c.expl}</span>`;
+    chip.addEventListener("click", () => {
+      state.category = c;
+      renderCategoryPick();
+      renderStory(true);
+      stepCard(3, true, true);
+      if (state.topic === null) pointTo("resultCard");
+    });
+    list.appendChild(chip);
+  }
+  wrap.appendChild(list);
 }
 
 function renderStory(showBig){
@@ -915,6 +973,10 @@ function wire(n, sp, allowed){
       big.highlight.setAttribute("visibility", "hidden");
       big.dim.setAttribute("visibility", "hidden");
     }
+    if (n === 3){
+      state.catPick = false;
+      renderCategoryPick();
+    }
   };
   $("spin"+n).addEventListener("click", () => {
     if (!allowed()) return;
@@ -952,8 +1014,10 @@ $("overlayNewRound").addEventListener("click", () => {
 
 $("resetBtn").addEventListener("click", () => {
   state.sector = null; state.color = null; state.topic = null; state.category = null;
+  state.catPick = false;
   big.highlight.setAttribute("visibility", "hidden");
   big.dim.setAttribute("visibility", "hidden");
+  renderCategoryPick();
   renderTopics();
   renderStory();
   stepCard(1, true, false);
