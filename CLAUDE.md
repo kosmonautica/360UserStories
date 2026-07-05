@@ -17,6 +17,10 @@ Udo Wiegärtner. The visual/game reference is the Miro board image
 - **UI language is English only** (an explicit owner decision; the topic labels come from the
   original English board).
 - Keep the beige/red/gold/green/blue board look (`:root` CSS variables at the top of the file).
+- **Build stamp (owner rule): on EVERY change to `index.html`, update the `#buildstamp` line in
+  the footer** to the current time before committing – format `Build: YYYY-MM-DD HH:MM UTC`
+  (get it via `date -u "+%Y-%m-%d %H:%M UTC"`). There is no build tooling to do this; it is a
+  manual step that must not be forgotten.
 
 ## Architecture of index.html
 
