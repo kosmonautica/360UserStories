@@ -51,6 +51,16 @@
   @media (max-width:980px){
     .layout{grid-template-columns:1fr;}
   }
+  /* Landscape/desktop: scale the big wheel so it always fits the viewport
+     completely (incl. its Spin button) without scrolling */
+  @media (min-width:981px){
+    #wheel1{
+      height:auto;
+      max-height:calc(100vh - 300px);
+      min-height:320px;
+      margin:0 auto;
+    }
+  }
   .card{
     background:var(--card);
     border:1px solid var(--line);
@@ -237,7 +247,7 @@
     0%{box-shadow:0 0 0 0 rgba(160,60,60,.6);}
     100%{box-shadow:0 0 0 20px rgba(160,60,60,0);}
   }
-  .card.attention{animation:pulseCard 1s ease-out 3;}
+  .attention{animation:pulseCard 1s ease-out 3;}
   #storyOverlay{
     position:fixed;
     inset:0;
@@ -469,7 +479,7 @@
   The sources for 360 User Stories are freely available on GitHub:
   <a href="https://github.com/kosmonautica/360UserStories" target="_blank" rel="noopener">github.com/kosmonautica/360UserStories</a>
   <!-- BUILDSTAMP: update on every change to this file (see CLAUDE.md) -->
-  <span class="buildstamp" id="buildstamp">Build: 05.07.2026, 11:51 (German time)</span>
+  <span class="buildstamp" id="buildstamp">Build: 05.07.2026, 12:00 (German time)</span>
 </footer>
 
 <script src="topics.js"></script>
@@ -749,14 +759,30 @@ function stepCard(n, active, done){
   c.classList.toggle("done", !!done);
 }
 
+function pulse(el){
+  el.classList.remove("attention");
+  void el.offsetWidth;              /* restart the animation */
+  el.classList.add("attention");
+  el.addEventListener("animationend", () => el.classList.remove("attention"), {once:true});
+}
+
 /* Scroll to the next step and briefly pulse its card */
 function pointTo(id){
   const c = $(id);
   c.scrollIntoView({behavior:"smooth", block:"nearest"});
-  c.classList.remove("attention");
-  void c.offsetWidth;               /* restart the animation */
-  c.classList.add("attention");
-  c.addEventListener("animationend", () => c.classList.remove("attention"), {once:true});
+  pulse(c);
+}
+
+/* Draw attention to the big wheel's Spin button (page load / new round):
+   scroll it into view if needed, then pulse it like the step cards */
+function attractSpin(){
+  const btn = $("spin1");
+  const r = btn.getBoundingClientRect();
+  if (r.top < 0 || r.bottom > window.innerHeight){
+    const target = Math.max(0, window.scrollY + r.bottom + 16 - window.innerHeight);
+    window.scrollTo({top: target, behavior:"smooth"});
+  }
+  pulse(btn);
 }
 
 /* --- Result of wheel 1: sector with up to 4 topics --- */
@@ -1024,10 +1050,11 @@ $("resetBtn").addEventListener("click", () => {
   $("spin1").disabled = false; $("stop1").disabled = true;
   $("spin2").disabled = true;  $("stop2").disabled = true;
   $("spin3").disabled = true;  $("stop3").disabled = true;
-  window.scrollTo({top:0, behavior:"smooth"});
+  attractSpin();
 });
 
 loop();
+setTimeout(attractSpin, 350);   /* also guide the eye on page load */
 </script>
 </body>
 </html>
