@@ -18,9 +18,9 @@ Udo Wiegärtner. The visual/game reference is the Miro board image
   original English board).
 - Keep the beige/red/gold/green/blue board look (`:root` CSS variables at the top of the file).
 - **Build stamp (owner rule): on EVERY change to `index.html`, update the `#buildstamp` line in
-  the footer** to the current time before committing – format `Build: YYYY-MM-DD HH:MM UTC`
-  (get it via `date -u "+%Y-%m-%d %H:%M UTC"`). There is no build tooling to do this; it is a
-  manual step that must not be forgotten.
+  the footer** to the current **German time** before committing – format
+  `Build: DD.MM.YYYY, HH:MM (German time)` (get it via `TZ=Europe/Berlin date "+%d.%m.%Y, %H:%M"`).
+  There is no build tooling to do this; it is a manual step that must not be forgotten.
 
 ## Architecture of index.html
 
@@ -92,8 +92,9 @@ Useful patterns from previous sessions:
 
 - The repo was renamed from `360StoriesUdosVersion` to `360UserStories` – old URLs and local
   clone directories may still use the old name; GitHub redirects them.
-- Development happens on `claude/…` feature branches PR'd into `main` (PRs #1, #2 so far).
-  The owner merges quickly – restart the feature branch from `origin/main` after each merge.
+- Development happens on `claude/…` feature branches PR'd into `main`. **The owner wants PRs
+  merged automatically** (squash merge, no waiting for approval) – open the PR, mark it ready,
+  merge it, then restart the feature branch from `origin/main`.
 - Keep code comments in English.
 - The owner communicates in German (often via speech-to-text – expect transcription quirks);
   the product itself stays English.
