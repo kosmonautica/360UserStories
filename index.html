@@ -466,9 +466,11 @@
   <b>360 User Stories</b> – assembled by Udo Wiegärtner.<br>
   Inspiration and copyright for the basic idea: “360 Stories” by Wilma Mulder (<a href="https://www.360stories.one" target="_blank" rel="noopener">www.360stories.one</a>)
   <!-- BUILDSTAMP: update on every change to this file (see CLAUDE.md) -->
-  <span class="buildstamp" id="buildstamp">Build: 05.07.2026, 11:10 (German time)</span>
+  <span class="buildstamp" id="buildstamp">Build: 05.07.2026, 11:44 (German time)</span>
 </footer>
 
+<script src="topics.js"></script>
+<script src="categories.js"></script>
 <script>
 "use strict";
 
@@ -484,15 +486,7 @@ const COLORS = {
   ink:   "#1f1c17"
 };
 
-/* Ring contents, clockwise from 12 o'clock */
-const RING_BLUE = ["Respect","Bug","Autonomy","Courage","Challenge","Happiness","Home Office","Beginnings",
-                   "Play","Commitment","Carreer","Balance","Dogma","Failure","Requirement","Effort",
-                   "Estimation","Fear","Doubt","Communication","Debt","Mastery","Passion","Learning",
-                   "Focus","Shame","Sprint","Retrospective","Meeting","Planning","Delivering","Transparency"];
-const RING_GREEN = ["Conflict","Growing","Profit","Vision","Strategy","Salary","Society","Economy",
-                    "Pandemic","HR","Scrum","Mindset","Motivation","Frustration","Quality","Trust"];
-const RING_GOLD  = ["Leader","Manager","Team","Scrum Master","Mentor","User","Product Owner","Tester"];
-const RING_RED   = ["People","Process","Product","Purpose"];
+/* Ring topics live in topics.js (easy to edit), clockwise from 12 o'clock */
 
 const RING_NAMES = {blue:"Outer Ring", green:"Green Ring", gold:"Gold Ring", red:"Inner Ring"};
 
@@ -506,15 +500,7 @@ const COLOR_SEGS = [
   {key:"black", fill:"#1a1a1a"}
 ];
 
-/* Category wheel, clockwise; sector 0 centered at top */
-const CATEGORIES = [
-  {label:"First",  expl:"What was a “first” moment in this context for you?"},
-  {label:"Last",   expl:"What was a “last” moment in this context for you – the most recent time?"},
-  {label:"Best",   expl:"What was a great moment in this context for you?"},
-  {label:"Worst",  expl:"What was a tough moment in this context for you?"},
-  {label:"Advise", expl:"What advice would you give on this topic?"},
-  {label:"?",      expl:"Your choice – tell whatever comes to mind about this topic."}
-];
+/* Category wheel data lives in categories.js (easy to edit); sector 0 centered at top */
 
 /* ============================== SVG helpers ============================== */
 

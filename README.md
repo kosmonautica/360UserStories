@@ -10,7 +10,14 @@ adapted by Udo Wiegärtner for job situations in an agile context.
 ## Play locally
 
 Simply **open `index.html` in your browser** – no server, no build, no dependencies.
-Everything (HTML, CSS, JavaScript, SVG graphics) lives in a single file and works offline with a double-click.
+The game works offline with a double-click; keep `topics.js` and `categories.js` next to `index.html`.
+
+## Customizing the words
+
+- **`topics.js`** – the four word rings of the big wheel. Edit any word; just keep the counts
+  at 32 / 16 / 8 / 4 and the clockwise order (the rings nest: two outer words belong to one
+  inner word).
+- **`categories.js`** – the six story categories of wheel 3 (label + explanation question).
 
 ## How to play
 
