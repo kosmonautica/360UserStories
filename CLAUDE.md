@@ -11,7 +11,11 @@ Udo Wiegärtner. The visual/game reference is the Miro board image
 
 ## Hard constraints
 
-- **Everything lives in `index.html`** – HTML, CSS, JS, and SVG generation in one file.
+- **All game logic lives in `index.html`** – HTML, CSS, JS, and SVG generation in one file.
+  The only exceptions are the two owner-editable data files `topics.js` (the four ring word
+  lists of the big wheel) and `categories.js` (the six wheel-3 categories), loaded via plain
+  `<script src>` tags so `file://` keeps working. Do NOT switch them to `fetch()`/JSON – that
+  breaks offline/`file://` use.
 - **No server, no build step, no external resources** (no CDNs, fonts, images). The page must
   work when opened via `file://` and offline.
 - **UI language is English only** (an explicit owner decision; the topic labels come from the
@@ -26,11 +30,13 @@ Udo Wiegärtner. The visual/game reference is the Miro board image
 
 Plain vanilla JS, no frameworks. The three wheels are SVGs generated at load time.
 
-- **Data** (top of the `<script>`): `RING_BLUE` (32), `RING_GREEN` (16), `RING_GOLD` (8),
-  `RING_RED` (4) hold the ring topics **clockwise starting at 12 o'clock**. Rings nest perfectly:
-  blue index `i` maps to green `⌊i/2⌋`, gold `⌊i/4⌋`, red `⌊i/8⌋` (see `sectorTopics()`).
-  `COLOR_SEGS` (blue/gold/white/red/green/black) and `CATEGORIES` (First/Last/Best/Worst/Advise/?)
-  are the 6-sector small wheels; their sector 0 is **centered** at the top (sectors start at −30°).
+- **Data:** `RING_BLUE` (32), `RING_GREEN` (16), `RING_GOLD` (8), `RING_RED` (4) live in
+  **`topics.js`** and hold the ring topics **clockwise starting at 12 o'clock**. Rings nest
+  perfectly: blue index `i` maps to green `⌊i/2⌋`, gold `⌊i/4⌋`, red `⌊i/8⌋` (see
+  `sectorTopics()`) – so the counts 32/16/8/4 must never change. `CATEGORIES`
+  (First/Last/Best/Worst/Advise/?) lives in **`categories.js`**. `COLOR_SEGS`
+  (blue/gold/white/red/green/black) stays in `index.html`. Both 6-sector small wheels have
+  sector 0 **centered** at the top (sectors start at −30°).
 - **Angle convention:** degrees clockwise from 12 o'clock; `pt(cx,cy,r,deg)` converts to x/y.
   Big-wheel sector index = `⌊angle/11.25⌋`; small wheels = `⌊((angle+30)%360)/60⌋`.
 - **SVG builders:** `buildBigWheel()`, `buildColorWheel()`, `buildCategoryWheel()`. Labels are
