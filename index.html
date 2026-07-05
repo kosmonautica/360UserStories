@@ -499,10 +499,10 @@ const COLOR_SEGS = [
 
 /* Category wheel, clockwise; sector 0 centered at top */
 const CATEGORIES = [
-  {label:"First",  expl:"What do you connect with the very first time in this context?"},
-  {label:"Last",   expl:"What do you connect with the most recent time in this context?"},
-  {label:"Best",   expl:"What was a great moment in this context?"},
-  {label:"Worst",  expl:"What was a tough moment in this context?"},
+  {label:"First",  expl:"What was a “first” moment in this context for you?"},
+  {label:"Last",   expl:"What was a “last” moment in this context for you – the most recent time?"},
+  {label:"Best",   expl:"What was a great moment in this context for you?"},
+  {label:"Worst",  expl:"What was a tough moment in this context for you?"},
   {label:"Advise", expl:"What advice would you give on this topic?"},
   {label:"?",      expl:"Your choice – tell whatever comes to mind about this topic."}
 ];
@@ -946,7 +946,7 @@ function renderStory(showBig){
   box.hidden = false;
   const cat = state.category;
   if (state.topic){
-    const mission = `Tell your <b>“${cat.label}”</b> story<br>about <b>“${state.topic}”</b>!`;
+    const mission = `Tell a personal story about the term <b>“${state.topic}”</b><br>you connect with <b>“${cat.label}”</b>.`;
     box.innerHTML = `<div class="storybox">${mission}<span class="catexpl">${cat.expl}</span></div>`;
     card.classList.add("ready");
     if (showBig){
