@@ -26,24 +26,19 @@
   }
   header{
     text-align:center;
-    padding:22px 16px 6px;
+    padding:14px 16px 0;
   }
   header h1{
     margin:0;
     font-size:clamp(22px,4vw,36px);
     letter-spacing:.5px;
   }
-  header p{
-    margin:6px 0 0;
-    color:var(--muted);
-    font-size:14px;
-  }
   header a{color:var(--blue);}
   .layout{
     display:grid;
-    grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);
+    grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);
     gap:18px;
-    max-width:1400px;
+    max-width:1500px;
     margin:14px auto 40px;
     padding:0 16px;
     align-items:start;
@@ -56,11 +51,14 @@
   @media (min-width:981px){
     #wheel1{
       height:auto;
-      max-height:calc(100vh - 300px);
+      max-height:calc(100vh - 190px);
       min-height:320px;
       margin:0 auto;
     }
   }
+  /* Let the big wheel use the full card width (the card keeps its padding
+     for heading and buttons only) */
+  #wheel1wrap{margin:0 -10px;}
   .card{
     background:var(--card);
     border:1px solid var(--line);
@@ -115,12 +113,6 @@
   button.primary:hover:not(:disabled){background:#8c3434;}
   button.stop{background:var(--ink);border-color:var(--ink);color:#fff;}
   button.stop:hover:not(:disabled){background:#000;}
-  .hint{
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
-    margin-top:8px;
-  }
   .rightcol{display:flex;flex-direction:column;gap:18px;}
   .smallwheels{
     display:grid;
@@ -342,7 +334,6 @@
 
 <header>
   <h1>360 User Stories – The Story Wheel</h1>
-  <p>A storytelling game about careers and work situations in an agile context · no winning, no ending – just stories</p>
 </header>
 
 <div class="layout">
@@ -357,7 +348,6 @@
       <button class="primary" id="spin1">Spin</button>
       <button class="stop" id="stop1" disabled>Stop!</button>
     </div>
-    <p class="hint">The wheel stops on its own after a short while – hit <b>“Stop!”</b> to stop it earlier.</p>
     <div class="wheeltopics" id="wheelTopicsWrap" hidden>
       <p class="label">The arrow points to these topics:</p>
       <div id="wheelColorHint" hidden></div>
@@ -479,7 +469,7 @@
   The sources for 360 User Stories are freely available on GitHub:
   <a href="https://github.com/kosmonautica/360UserStories" target="_blank" rel="noopener">github.com/kosmonautica/360UserStories</a>
   <!-- BUILDSTAMP: update on every change to this file (see CLAUDE.md) -->
-  <span class="buildstamp" id="buildstamp">Build: 05.07.2026, 12:00 (German time)</span>
+  <span class="buildstamp" id="buildstamp">Build: 06.07.2026, 07:47 (German time)</span>
 </footer>
 
 <script src="topics.js"></script>
@@ -557,7 +547,7 @@ let pathId = 0;
 
 function ringLabel(svg, defs, cx, cy, r, a0, a1, text, maxFont){
   const arcLen = r * (a1 - a0) * Math.PI / 180;
-  const fs = Math.min(maxFont, (arcLen - 14) / (text.length * 0.62));
+  const fs = Math.min(maxFont, (arcLen - 10) / (text.length * 0.6));
   const id = "lp" + (pathId++);
   el("path", {id, d: labelArc(cx,cy,r,a0,a1), fill:"none"}, defs);
   const t = el("text", {
@@ -580,10 +570,10 @@ function buildBigWheel(){
   el("circle", {cx, cy, r:495, fill:COLORS.board, stroke:COLORS.ink, "stroke-width":2}, svg);
 
   const rings = [
-    {items:RING_RED,   r0:150, r1:215, color:COLORS.red,   maxFont:34},
-    {items:RING_GOLD,  r0:245, r1:308, color:COLORS.gold,  maxFont:27},
-    {items:RING_GREEN, r0:338, r1:400, color:COLORS.green, maxFont:23},
-    {items:RING_BLUE,  r0:428, r1:488, color:COLORS.blue,  maxFont:18}
+    {items:RING_RED,   r0:150, r1:215, color:COLORS.red,   maxFont:40},
+    {items:RING_GOLD,  r0:245, r1:308, color:COLORS.gold,  maxFont:32},
+    {items:RING_GREEN, r0:338, r1:400, color:COLORS.green, maxFont:27},
+    {items:RING_BLUE,  r0:428, r1:488, color:COLORS.blue,  maxFont:22}
   ];
 
   for (const ring of rings){
